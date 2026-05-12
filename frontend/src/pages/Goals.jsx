@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import { toast } from 'react-hot-toast';
@@ -8,15 +10,22 @@ const Goals = () => {
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ title: '', type: 'weight', targetValue: '', unit: 'kg', deadline: '' });
 
-  useEffect(() => { fetchGoals(); }, []);
-
+  // Define fetchGoals BEFORE using it in useEffect
   const fetchGoals = async () => {
     try {
       const res = await api.get('/goals');
       setGoals(res.data.goals);
-    } catch { toast.error('Failed to load goals'); }
-    finally { setLoading(false); }
+    } catch {
+      toast.error('Failed to load goals');
+    } finally {
+      setLoading(false);
+    }
   };
+
+  // Now useEffect can safely call fetchGoals
+  useEffect(() => {
+    fetchGoals();
+  }, []);
 
   const submitGoal = async (e) => {
     e.preventDefault();
@@ -26,16 +35,20 @@ const Goals = () => {
       setShowModal(false);
       setForm({ title: '', type: 'weight', targetValue: '', unit: 'kg', deadline: '' });
       fetchGoals();
-    } catch { toast.error('Failed to create goal'); }
+    } catch {
+      toast.error('Failed to create goal');
+    }
   };
 
   const deleteGoal = async (id) => {
-    if(!window.confirm('Delete this goal?')) return;
+    if (!window.confirm('Delete this goal?')) return;
     try {
       await api.delete(`/goals/${id}`);
       setGoals(goals.filter(g => g._id !== id));
       toast.success('Goal deleted');
-    } catch { toast.error('Delete failed'); }
+    } catch {
+      toast.error('Delete failed');
+    }
   };
 
   if (loading) return <div className="loading-screen"><div className="spinner" /><p>Loading goals...</p></div>;
@@ -56,13 +69,13 @@ const Goals = () => {
             <div className="goal-header">
               <div>
                 <div className="goal-title">{g.title}</div>
-                <div className="goal-type" style={{textTransform:'capitalize'}}>{g.type}</div>
+                <div className="goal-type" style={{ textTransform: 'capitalize' }}>{g.type}</div>
               </div>
-              <button onClick={() => deleteGoal(g._id)} style={{background:'none',border:'none',color:'var(--accent-red)',cursor:'pointer'}}>✖</button>
+              <button onClick={() => deleteGoal(g._id)} style={{ background: 'none', border: 'none', color: 'var(--accent-red)', cursor: 'pointer' }}>✖</button>
             </div>
             <div className="goal-progress">
               <div className="goal-progress-bar">
-                <div className="goal-progress-fill" style={{width: `${g.progressPercent}%`}}></div>
+                <div className="goal-progress-fill" style={{ width: `${g.progressPercent}%` }}></div>
               </div>
               <div className="goal-progress-text">
                 <span>{g.currentValue} {g.unit}</span>
@@ -70,7 +83,7 @@ const Goals = () => {
               </div>
             </div>
             {g.deadline && <div className="goal-deadline">📅 Deadline: {new Date(g.deadline).toLocaleDateString()}</div>}
-            {g.achieved && <div style={{marginTop:8, color:'var(--accent-green)', fontSize:'0.8rem', fontWeight:'bold'}}>🎉 Goal Achieved!</div>}
+            {g.achieved && <div style={{ marginTop: 8, color: 'var(--accent-green)', fontSize: '0.8rem', fontWeight: 'bold' }}>🎉 Goal Achieved!</div>}
           </div>
         ))}
       </div>
@@ -93,12 +106,12 @@ const Goals = () => {
             <form onSubmit={submitGoal}>
               <div className="form-group">
                 <label className="form-label">Title</label>
-                <input required className="form-input" value={form.title} onChange={e => setForm({...form, title: e.target.value})} />
+                <input required className="form-input" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} />
               </div>
               <div className="form-row">
                 <div className="form-group">
                   <label className="form-label">Type</label>
-                  <select className="form-select" value={form.type} onChange={e => setForm({...form, type: e.target.value})}>
+                  <select className="form-select" value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}>
                     <option value="weight">Weight</option>
                     <option value="calories">Calories</option>
                     <option value="water">Water</option>
@@ -107,17 +120,17 @@ const Goals = () => {
                 </div>
                 <div className="form-group">
                   <label className="form-label">Target Value</label>
-                  <input required type="number" className="form-input" value={form.targetValue} onChange={e => setForm({...form, targetValue: e.target.value})} />
+                  <input required type="number" className="form-input" value={form.targetValue} onChange={e => setForm({ ...form, targetValue: e.target.value })} />
                 </div>
               </div>
               <div className="form-row">
                 <div className="form-group">
                   <label className="form-label">Unit</label>
-                  <input required className="form-input" placeholder="kg, kcal, etc." value={form.unit} onChange={e => setForm({...form, unit: e.target.value})} />
+                  <input required className="form-input" placeholder="kg, kcal, etc." value={form.unit} onChange={e => setForm({ ...form, unit: e.target.value })} />
                 </div>
                 <div className="form-group">
                   <label className="form-label">Deadline</label>
-                  <input type="date" className="form-input" value={form.deadline} onChange={e => setForm({...form, deadline: e.target.value})} />
+                  <input type="date" className="form-input" value={form.deadline} onChange={e => setForm({ ...form, deadline: e.target.value })} />
                 </div>
               </div>
               <button type="submit" className="btn btn-primary btn-full mt-4">Save Goal</button>
