@@ -1,7 +1,13 @@
 import axios from 'axios';
 
+let baseURL = import.meta.env.VITE_API_BASE_URL || '/api';
+// Remove trailing slash if exists to avoid double slashes in requests
+if (baseURL.endsWith('/')) {
+  baseURL = baseURL.slice(0, -1);
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL,
   headers: { 'Content-Type': 'application/json' },
 });
 
