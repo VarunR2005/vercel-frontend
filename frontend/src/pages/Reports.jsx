@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import { CalorieChart, SleepChart, WaterChart, ExerciseChart } from '../components/Charts';
@@ -10,23 +8,18 @@ const Reports = () => {
   const [reportData, setReportData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Define fetchReport BEFORE using it in useEffect
+  useEffect(() => {
+    fetchReport();
+  }, [period]);
+
   const fetchReport = async () => {
     setLoading(true);
     try {
       const res = await api.get(`/reports/${period}`);
       setReportData(res.data);
-    } catch {
-      toast.error('Failed to load report');
-    } finally {
-      setLoading(false);
-    }
+    } catch { toast.error('Failed to load report'); }
+    finally { setLoading(false); }
   };
-
-  // Now useEffect can safely call fetchReport
-  useEffect(() => {
-    fetchReport();
-  }, [period]);
 
   if (loading && !reportData) return <div className="loading-screen"><div className="spinner" /><p>Analyzing your data...</p></div>;
 
@@ -65,19 +58,19 @@ const Reports = () => {
           <div className="stats-grid">
             <div className="stat-card">
               <div className="stat-label">Avg Daily Calories</div>
-              <div className="stat-value">{reportData.averages?.calories || 0}</div>
+              <div className="stat-value">{reportData.averages.calories}</div>
             </div>
             <div className="stat-card">
               <div className="stat-label">Avg Daily Water</div>
-              <div className="stat-value">{reportData.averages?.water || 0} <span className="text-sm">ml</span></div>
+              <div className="stat-value">{reportData.averages.water} <span className="text-sm">ml</span></div>
             </div>
             <div className="stat-card">
               <div className="stat-label">Avg Daily Sleep</div>
-              <div className="stat-value">{reportData.averages?.sleep || 0} <span className="text-sm">h</span></div>
+              <div className="stat-value">{reportData.averages.sleep} <span className="text-sm">h</span></div>
             </div>
             <div className="stat-card">
               <div className="stat-label">Avg Daily Exercise</div>
-              <div className="stat-value">{reportData.averages?.exercise || 0} <span className="text-sm">m</span></div>
+              <div className="stat-value">{reportData.averages.exercise} <span className="text-sm">m</span></div>
             </div>
           </div>
 

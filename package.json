@@ -1,0 +1,24 @@
+{
+  "name": "health-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "test_api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VarunR2005/vercel-frontend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/VarunR2005/vercel-frontend/issues"
+  },
+  "homepage": "https://github.com/VarunR2005/vercel-frontend#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

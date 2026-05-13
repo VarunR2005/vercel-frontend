@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-
 import { useState, useEffect } from 'react';
 import api from '../services/api';
 import { toast } from 'react-hot-toast';
@@ -10,22 +8,15 @@ const Goals = () => {
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ title: '', type: 'weight', targetValue: '', unit: 'kg', deadline: '' });
 
-  // Define fetchGoals BEFORE using it in useEffect
+  useEffect(() => { fetchGoals(); }, []);
+
   const fetchGoals = async () => {
     try {
       const res = await api.get('/goals');
       setGoals(res.data.goals);
-    } catch {
-      toast.error('Failed to load goals');
-    } finally {
-      setLoading(false);
-    }
+    } catch { toast.error('Failed to load goals'); }
+    finally { setLoading(false); }
   };
-
-  // Now useEffect can safely call fetchGoals
-  useEffect(() => {
-    fetchGoals();
-  }, []);
 
   const submitGoal = async (e) => {
     e.preventDefault();
@@ -35,9 +26,7 @@ const Goals = () => {
       setShowModal(false);
       setForm({ title: '', type: 'weight', targetValue: '', unit: 'kg', deadline: '' });
       fetchGoals();
-    } catch {
-      toast.error('Failed to create goal');
-    }
+    } catch { toast.error('Failed to create goal'); }
   };
 
   const deleteGoal = async (id) => {
@@ -46,9 +35,7 @@ const Goals = () => {
       await api.delete(`/goals/${id}`);
       setGoals(goals.filter(g => g._id !== id));
       toast.success('Goal deleted');
-    } catch {
-      toast.error('Delete failed');
-    }
+    } catch { toast.error('Delete failed'); }
   };
 
   if (loading) return <div className="loading-screen"><div className="spinner" /><p>Loading goals...</p></div>;
