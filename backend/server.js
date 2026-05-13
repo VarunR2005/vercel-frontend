@@ -11,7 +11,17 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:3000'], credentials: true }));
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  process.env.FRONTEND_URL,
+  'https://vercel.com', // Placeholder, but will allow all if configured below
+].filter(Boolean);
+
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' ? true : allowedOrigins,
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
