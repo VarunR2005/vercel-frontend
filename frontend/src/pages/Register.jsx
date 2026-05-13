@@ -187,11 +187,11 @@ const Register = () => {
                   </div>
                 )}
 
-                <div style={{ display: 'flex', gap: 10 }}>
-                  <button type="button" onClick={() => setStep(0)} style={{...styles.btn, background:'rgba(255,255,255,0.07)', boxShadow:'none', flex:'0 0 auto', padding:'14px 20px'}}>
+                <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
+                  <button type="button" onClick={() => setStep(0)} style={{...styles.btn, flex: 1, background: 'rgba(255,255,255,0.07)', boxShadow: 'none', width: 'auto'}}>
                     ← Back
                   </button>
-                  <button id="register-btn" type="submit" style={{...styles.btn, flex:1}} disabled={loading}>
+                  <button id="register-btn" type="submit" style={{...styles.btn, flex: 2, width: 'auto'}} disabled={loading}>
                     <span style={{ position:'relative', zIndex:1 }}>{loading ? '⏳ Creating...' : '✨ Create Account'}</span>
                     <div style={styles.btnShimmer} />
                   </button>
